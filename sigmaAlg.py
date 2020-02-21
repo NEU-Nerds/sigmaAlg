@@ -1,14 +1,19 @@
 import util
 import multiprocessing as mp
 import time
+import os
 
 BATCH_SIZE = 50000
-MAX_SIGMA = 19
+MAX_SIGMA = 50
 PROCESSES = 6
 
 def main():
 	# print('hi')
 	evens = set([(1,)])
+	try:
+		os.mkdir("./evens")
+	except:
+		pass
 
 	for s in range(2, MAX_SIGMA + 1):
 		t1 = time.time()
@@ -17,10 +22,11 @@ def main():
 			pHandler.run(b)
 		newEvens = pHandler.getEvens()
 		evens.update(newEvens)
-		print(f"sigma: {s} \tevens: {len(newEvens)} in {time.time() - t1}s" )
+		print(f"sigma: {s} \tevens: {len(evens)} in {time.time() - t1}s" )
+		util.store(evens, f"./evens/evens_{s}.dat")
 		# print(f"newEvens: {newEvens}")
 		pHandler.terminate()
-	print(f"evens: {evens}")
+	# print(f"evens: {evens}")
 
 
 #load up new processes with evens set
@@ -69,7 +75,7 @@ class ProccesHandler:
 	def getEvens(self):
 		t = time.time()
 		self.nodesQ.join()
-		print(f"Waited {time.time()-t}s for queue to empty")
+		# print(f"Waited {time.time()-t}s for queue to empty")
 		newEvens = set()
 		while not self.evensQ.empty():
 			e = self.evensQ.get()

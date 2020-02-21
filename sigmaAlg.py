@@ -4,8 +4,8 @@ import time
 import os
 
 BATCH_SIZE = 50000
-MAX_SIGMA = 20
-PROCESSES = 1
+MAX_SIGMA = 50
+PROCESSES = 6
 
 def main():
 	# print('hi')
@@ -42,7 +42,7 @@ def nodesLoop(evens, evensQ, nodesQ):
 			if isEven(evens, node):
 				# print(f"is even")
 				newEvens.add(node)
-		print("putting new evens")
+		# print("putting new evens")
 		evensQ.put(newEvens)
 
 		nodesQ.task_done()
@@ -62,7 +62,7 @@ class ProccesHandler:
 	evensQ = None
 
 	def __init__(self, evens, workers=6):
-		self.nodesQ = mp.JoinableQueue()
+		self.nodesQ = mp.JoinableQueue(workers)
 		self.evensQ = mp.JoinableQueue()
 		#states processes
 		self.processes = [mp.Process(target=nodesLoop, args=(evens, self.evensQ, self.nodesQ), daemon=True) for i in range(workers)]
@@ -76,7 +76,7 @@ class ProccesHandler:
 	def getEvens(self):
 		t = time.time()
 		self.nodesQ.join()
-		print(f"Waited {time.time()-t}s for queue to empty")
+		# print(f"Waited {time.time()-t}s for queue to empty")
 		newEvens = set()
 		# print(f"Size: {self.evensQ.qsize()}")
 		c = 0

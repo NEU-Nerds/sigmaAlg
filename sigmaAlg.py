@@ -4,8 +4,8 @@ import time
 import os
 
 BATCH_SIZE = 50000
-MAX_SIGMA = 50
-PROCESSES = 6
+MAX_SIGMA = 20
+PROCESSES = 1
 
 def main():
 	# print('hi')

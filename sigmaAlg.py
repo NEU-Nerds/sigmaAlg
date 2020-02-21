@@ -42,6 +42,7 @@ def nodesLoop(evens, evensQ, nodesQ):
 			if isEven(evens, node):
 				# print(f"is even")
 				newEvens.add(node)
+		print("putting new evens")
 		evensQ.put(newEvens)
 
 		nodesQ.task_done()
@@ -75,11 +76,24 @@ class ProccesHandler:
 	def getEvens(self):
 		t = time.time()
 		self.nodesQ.join()
-		# print(f"Waited {time.time()-t}s for queue to empty")
+		print(f"Waited {time.time()-t}s for queue to empty")
 		newEvens = set()
-		while not self.evensQ.empty():
-			e = self.evensQ.get()
+		# print(f"Size: {self.evensQ.qsize()}")
+		c = 0
+		# running
+		while True:
+			try:
+				e = self.evensQ.get(True, 0.01)
+			except:
+				break
 			newEvens.update(e)
+			c += 1
+		# while not self.evensQ.empty():
+		# 	c += 1
+		# 	e = self.evensQ.get()
+		# 	newEvens.update(e)
+		if c == 0:
+			print("\nCOUNT WAS 0\n")
 		return newEvens
 
 	def terminate(self):

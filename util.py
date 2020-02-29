@@ -98,6 +98,23 @@ def emptyDir(folder):
 # def rootsLoad(x):
 # 	return load(x)
 
+def startSigma():
+	files = os.listdir(f"./evens/")
+	max = 0
+	for file in files:
+		s = file[len("evens_"):]
+		s = s[:-len(".dat")]
+		# print(s)
+		try:
+			if (int(s) > max):
+				max = int(s)
+		except:
+			pass
+
+	# print(files)
+	print(max)
+	return max
+
 def load(fileName):
 	with open (fileName, 'rb') as f:
 		return pickle.load(f)

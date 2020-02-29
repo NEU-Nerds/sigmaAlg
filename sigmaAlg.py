@@ -3,19 +3,26 @@ import multiprocessing as mp
 import time
 import os
 
-BATCH_SIZE = 50000
-MAX_SIGMA = 50
-PROCESSES = 6
+BATCH_SIZE = 100000
+MAX_SIGMA = 144
+PROCESSES = 12
 
 def main():
 	# print('hi')
-	evens = set([(1,)])
+
 	try:
 		os.mkdir("./evens")
 	except:
 		pass
 
-	for s in range(2, MAX_SIGMA + 1):
+	evens = set([(1,)])
+	evens = util.load(f"./evens/evens.dat")
+
+	startSigma = util.startSigma()
+
+	# startSigma = 2
+
+	for s in range(startSigma+1, MAX_SIGMA + 1):
 		t1 = time.time()
 		pHandler = ProccesHandler(evens, PROCESSES)
 		for b in util.sigmaBatches(s, BATCH_SIZE):
